@@ -3,7 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-  <title>PL Chat — Robbie & Precious | Real Messenger</title>
+  <title>PL Chat — Robbie & Precious | Install App</title>
+  <!-- App manifest for installability -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    %22name%22: %22PL Chat%22,
+    %22short_name%22: %22PLChat%22,
+    %22start_url%22: %22.%22,
+    %22display%22: %22standalone%22,
+    %22background_color%22: %220b101a%22,
+    %22theme_color%22: %22128c7e%22,
+    %22icons%22: [
+      {
+        %22src%22: %22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23128c7e'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='system-ui'%3E💕%3C/text%3E%3C/svg%3E%22,
+        %22sizes%22: %22512x512%22,
+        %22type%22: %22image/svg+xml%22,
+        %22purpose%22: %22any maskable%22
+      },
+      {
+        %22src%22: %22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23128c7e'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='white' font-family='system-ui'%3E💕%3C/text%3E%3C/svg%3E%22,
+        %22sizes%22: %22192x192%22,
+        %22type%22: %22image/svg+xml%22
+      }
+    ]
+  }">
   <style>
     * {
       margin: 0;
@@ -132,7 +154,7 @@
       box-shadow: 0 2px 10px rgba(26, 95, 140, 0.35);
     }
 
-    /* messages container - flexible scrolling */
+    /* messages container */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
@@ -272,7 +294,7 @@
       border-radius: 40px;
     }
 
-    /* input area - stays at bottom like real chat app */
+    /* input area */
     .input-zone {
       background: #0c111e;
       padding: 12px 16px 14px 16px;
@@ -347,8 +369,8 @@
       align-items: center;
     }
 
-    /* Smart Download Button - Real Working Download */
-    .smart-download-btn {
+    /* INSTALL BUTTON - Beautiful & disappears after install */
+    .install-btn {
       position: fixed;
       bottom: 25px;
       right: 25px;
@@ -368,13 +390,17 @@
       animation: floatBtn 2.5s ease-in-out infinite;
     }
 
-    .smart-download-btn:hover {
+    .install-btn:hover {
       transform: translateY(-5px) scale(1.08);
       box-shadow: 0 12px 30px rgba(0, 114, 255, 0.6), 0 0 25px rgba(0, 198, 255, 0.8);
     }
 
-    .smart-download-btn:active {
+    .install-btn:active {
       transform: scale(0.95);
+    }
+
+    .install-btn.hidden {
+      display: none !important;
     }
 
     @keyframes floatBtn {
@@ -384,123 +410,46 @@
     }
 
     @media (max-width: 768px) {
-      .smart-download-btn {
+      .install-btn {
         width: 60px;
         height: 60px;
         bottom: 20px;
         right: 20px;
       }
-      .smart-download-btn svg {
+      .install-btn svg {
         width: 28px;
         height: 28px;
       }
     }
 
-    /* Modal overlay for download prompt */
-    .download-modal {
+    /* Install prompt toast */
+    .install-toast {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0.2s, opacity 0.2s ease;
-    }
-    .download-modal.active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .modal-card {
-      background: #11161f;
-      border-radius: 48px;
-      max-width: 320px;
-      width: 85%;
-      padding: 28px 24px 32px;
-      text-align: center;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      animation: modalZoom 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
-    }
-    @keyframes modalZoom {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .modal-card h3 {
-      font-size: 24px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, #aac8ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 12px;
-    }
-    .modal-card p {
-      color: #9aa9c7;
-      font-size: 14px;
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
-    .modal-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .download-option {
-      background: linear-gradient(135deg, #1f6392, #128c7e);
-      border: none;
-      padding: 14px;
+      bottom: 100px;
+      right: 20px;
+      background: #1e2a3a;
+      backdrop-filter: blur(20px);
+      padding: 12px 20px;
       border-radius: 60px;
       color: white;
-      font-weight: 700;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .download-option:hover {
-      transform: scale(1.02);
-      filter: brightness(1.05);
-    }
-    .close-modal {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 12px;
-      border-radius: 60px;
-      color: #ccd9ff;
+      font-size: 13px;
       font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
+      z-index: 998;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: fadeInUp 0.3s ease;
+      pointer-events: none;
     }
-    .close-modal:hover {
-      background: rgba(255,255,255,0.15);
-    }
-    .feature-badge {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 16px;
-      font-size: 10px;
-      color: #5f73a1;
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
 <div class="phone-device">
-  <div class="dynamic-notch">
-    <span>📱 9:41</span>
-    <span style="font-size:10px;">📶 🔋</span>
-  </div>
+  
   <div class="chat-app">
     <div class="chat-header">
       <div class="brand">
@@ -527,34 +476,15 @@
   </div>
 </div>
 
-<!-- SMART FLOATING DOWNLOAD BUTTON -->
-<button class="smart-download-btn" id="floatingDownloadBtn" aria-label="Download App">
+<!-- INSTALL BUTTON - disappears after installation -->
+<button class="install-btn" id="installBtn">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="32px" height="32px">
     <path d="M12 16.5L7.5 12L9 10.5L11 12.5V3H13V12.5L15 10.5L16.5 12L12 16.5ZM5 20H19V18H5V20Z" />
   </svg>
 </button>
 
-<!-- Download Modal Popup -->
-<div id="downloadModal" class="download-modal">
-  <div class="modal-card">
-    <h3>💕 PL Chat</h3>
-    <p>Save this chat as an app on your phone! Works offline & feels like native.</p>
-    <div class="modal-buttons">
-      <button id="downloadAppBtn" class="download-option">
-        <span>📲</span> Install App / Download
-      </button>
-      <button id="closeModalBtn" class="close-modal">Maybe later</button>
-    </div>
-    <div class="feature-badge">
-      <span>🔒 Private chats</span>
-      <span>💬 Real-time typing</span>
-      <span>✨ No auto-reply</span>
-    </div>
-  </div>
-</div>
-
 <script>
-  // =============== PRIVATE MESSENGER - REAL CHAT APP BEHAVIOR ===============
+  // =============== PRIVATE MESSENGER - FULL CHAT APP ===============
   let currentUser = "Person 1";
   let messages = [];
   let nextMsgId = 1;
@@ -565,12 +495,82 @@
   const person1Btn = document.getElementById("person1Btn");
   const person2Btn = document.getElementById("person2Btn");
   const liveStatusText = document.getElementById("liveStatusText");
+  const installBtn = document.getElementById("installBtn");
   
   let activeTypingTimeout = null;
   let isTypingIndicatorShown = false;
   let currentTypingUser = null;
   
-  // Helper: smooth scroll to bottom (like real chat)
+  // PWA Installation tracking
+  let deferredPrompt = null;
+  let isAppInstalled = false;
+  
+  // Check if already installed (standalone mode)
+  function checkIfInstalled() {
+    if (window.matchMedia('(display-mode: standalone)').matches || 
+        window.navigator.standalone === true) {
+      isAppInstalled = true;
+      installBtn.classList.add('hidden');
+      return true;
+    }
+    // Check localStorage flag
+    if (localStorage.getItem('plchat_app_installed') === 'true') {
+      isAppInstalled = true;
+      installBtn.classList.add('hidden');
+      return true;
+    }
+    return false;
+  }
+  
+  // Listen for beforeinstallprompt event
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Show install button if not installed
+    if (!isAppInstalled && !checkIfInstalled()) {
+      installBtn.classList.remove('hidden');
+    }
+  });
+  
+  // Listen for app installed event
+  window.addEventListener('appinstalled', () => {
+    isAppInstalled = true;
+    localStorage.setItem('plchat_app_installed', 'true');
+    installBtn.classList.add('hidden');
+    showToast('✅ App installed! Enjoy PL Chat 💕');
+  });
+  
+  function showToast(message) {
+    const existingToast = document.querySelector('.install-toast');
+    if (existingToast) existingToast.remove();
+    const toast = document.createElement('div');
+    toast.className = 'install-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+  
+  // Handle install button click
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        isAppInstalled = true;
+        localStorage.setItem('plchat_app_installed', 'true');
+        installBtn.classList.add('hidden');
+        showToast('🎉 PL Chat installed on your device!');
+      } else {
+        showToast('You can install later from browser menu');
+      }
+      deferredPrompt = null;
+    } else {
+      // Fallback for browsers that don't support beforeinstallprompt
+      showToast('📲 Tap browser menu → "Add to Home Screen" or "Install App"');
+    }
+  });
+  
+  // Scroll helper
   function scrollToBottom(behavior = 'smooth') {
     if (messagesContainer) {
       messagesContainer.scrollTo({
@@ -684,7 +684,7 @@
     return true;
   }
   
-  // Typing indicator (realistic)
+  // Typing indicator
   function showTypingIndicatorForUser(typingUser) {
     const existing = document.getElementById("liveTypingWidget");
     if (existing) existing.remove();
@@ -753,34 +753,28 @@
     removeTypingIndicator();
   }
   
-  // ========== KEYBOARD HANDLING: Keep input field visible & auto-scroll ==========
-  // This ensures the keyboard doesn't break the layout and chat flows naturally
+  // Keyboard handling
   function handleKeyboardOpen() {
     setTimeout(() => {
       scrollToBottom('auto');
-      // Ensure the active element (input) is visible in viewport
       if (messageInput) {
         messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }, 100);
   }
   
-  // Listen for focus events on input to handle keyboard
   messageInput.addEventListener("focus", handleKeyboardOpen);
   messageInput.addEventListener("click", handleKeyboardOpen);
   
-  // Detect keyboard open via resize (mobile devices)
   let lastWindowHeight = window.innerHeight;
   window.addEventListener('resize', () => {
     const newHeight = window.innerHeight;
     if (newHeight < lastWindowHeight) {
-      // Keyboard opened
       handleKeyboardOpen();
     }
     lastWindowHeight = newHeight;
   });
   
-  // Also scroll when typing (keeps bottom in view)
   messageInput.addEventListener("input", () => {
     if (messageInput.value.trim().length > 0) {
       onUserTyping();
@@ -788,44 +782,7 @@
     }
   });
   
-  // ========== REAL WORKING DOWNLOAD / INSTALL ==========
-  const floatingBtn = document.getElementById("floatingDownloadBtn");
-  const modal = document.getElementById("downloadModal");
-  const closeModalBtn = document.getElementById("closeModalBtn");
-  const downloadAppBtn = document.getElementById("downloadAppBtn");
-  
-  function openModal() {
-    modal.classList.add("active");
-  }
-  function closeModal() {
-    modal.classList.remove("active");
-  }
-  
-  function downloadAsApp() {
-    const htmlContent = document.documentElement.outerHTML;
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'PL_Chat_Robbie_Precious.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    alert("📲 File downloaded!\n\nFor BEST app experience:\n• iOS: Save to Files then 'Add to Home Screen'\n• Android: Open file in Chrome → Menu → 'Install App' or 'Add to Home Screen'\n\nYour chat history will be saved in your browser!");
-    closeModal();
-    localStorage.setItem("plchat_downloaded", "true");
-    floatingBtn.style.transform = "scale(0.95)";
-    setTimeout(() => floatingBtn.style.transform = "", 200);
-  }
-  
-  floatingBtn.addEventListener("click", openModal);
-  closeModalBtn.addEventListener("click", closeModal);
-  downloadAppBtn.addEventListener("click", downloadAsApp);
-  modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-  
-  // Bind send events
+  // Bind events
   function bindEvents() {
     sendBtn.addEventListener("click", sendNewMessage);
     messageInput.addEventListener("keypress", (e) => { 
@@ -842,6 +799,7 @@
   loadStoredMessages();
   setActiveUser("Person 1");
   bindEvents();
+  checkIfInstalled();
   setTimeout(() => scrollToBottom('auto'), 100);
   
   window.addEventListener("beforeunload", () => {
