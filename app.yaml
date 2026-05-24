@@ -1,0 +1,5 @@
+runtime: nodejs24
+env: standard
+
+network:
+  session_affinity: true
