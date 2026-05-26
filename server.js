@@ -87,11 +87,31 @@ wss.on('connection', (ws, req) => {
                             messageHistory 
                         }));
                         
-                        // Notify other user
-                        broadcastToOther(username, {
+                        // Broadcast online status to ALL other users
+                        broadcastToAllExcept(username, {
                             type: 'user_status',
-                            username,
+                            username: username,
                             status: 'online'
+                        });
+                        
+                        // Send current online status of other users to newly connected user
+                        const otherUsersStatus = [];
+                        for (let [user, client] of clients) {
+                            if (user !== username && client.readyState === WebSocket.OPEN) {
+                                otherUsersStatus.push({
+                                    username: user,
+                                    status: 'online'
+                                });
+                            }
+                        }
+                        
+                        // Send status of all online users to the new user
+                        otherUsersStatus.forEach(status => {
+                            ws.send(JSON.stringify({
+                                type: 'user_status',
+                                username: status.username,
+                                status: status.status
+                            }));
                         });
                     } else {
                         console.log(`❌ WebSocket auth failed: ${parsed.username}`);
@@ -123,7 +143,7 @@ wss.on('connection', (ws, req) => {
                     
                 case 'typing':
                     if (username) {
-                        broadcastToOther(username, {
+                        broadcastToAllExcept(username, {
                             type: 'typing',
                             isTyping: parsed.isTyping,
                             username: username
@@ -140,9 +160,11 @@ wss.on('connection', (ws, req) => {
         if (username) {
             console.log(`🔴 User disconnected: ${username}`);
             clients.delete(username);
-            broadcastToOther(username, {
+            
+            // Broadcast offline status to all other users
+            broadcastToAllExcept(username, {
                 type: 'user_status',
-                username,
+                username: username,
                 status: 'offline'
             });
         }
@@ -161,12 +183,17 @@ function broadcastToAll(message) {
     });
 }
 
-function broadcastToOther(senderUsername, data) {
+function broadcastToAllExcept(senderUsername, data) {
     clients.forEach((client, username) => {
         if (username !== senderUsername && client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(data));
         }
     });
+}
+
+function broadcastToOther(senderUsername, data) {
+    // This function is kept for compatibility but use broadcastToAllExcept instead
+    broadcastToAllExcept(senderUsername, data);
 }
 
 const PORT = 5000;
@@ -178,4 +205,5 @@ server.listen(PORT, () => {
         console.log(`   - ${user}`);
     });
     console.log('\n💡 Open two browser windows and login with different users\n');
+    console.log('✨ Online/Offline status is now working properly!\n');
 });

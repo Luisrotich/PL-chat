@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>💫 Private Messenger | Precious & Luis</title>
     <style>
         * {
@@ -15,13 +15,17 @@
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
+            padding: 0;
+            margin: 0;
         }
 
+        /* Animated background */
         body::before {
             content: '';
             position: absolute;
@@ -31,6 +35,7 @@
             background-size: 50px 50px;
             animation: moveDots 20s linear infinite;
             opacity: 0.3;
+            pointer-events: none;
         }
 
         @keyframes moveDots {
@@ -40,15 +45,24 @@
 
         .container {
             width: 100%;
-            max-width: 1000px;
-            height: 90vh;
+            max-width: 1200px;
+            height: 100vh;
+            height: 100dvh;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 30px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             position: relative;
             z-index: 1;
+            border-radius: 0;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                height: 90vh;
+                height: 90dvh;
+                border-radius: 30px;
+                max-width: 1000px;
+            }
         }
 
         .screen {
@@ -61,28 +75,32 @@
             display: flex;
         }
 
+        /* Login Screen */
         .login-card {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 20px;
             background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.98) 100%);
         }
 
         .login-card h1 {
-            font-size: 3em;
+            font-size: clamp(1.5em, 5vw, 3em);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 10px;
+            text-align: center;
         }
 
         .login-card p {
             color: #6b7280;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            font-size: clamp(0.9em, 4vw, 1.1em);
+            text-align: center;
         }
 
         #loginForm {
@@ -90,7 +108,7 @@
             max-width: 350px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .input-group {
@@ -107,11 +125,13 @@
 
         #loginForm input {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 12px 15px 12px 45px;
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s;
+            -webkit-appearance: none;
+            background: white;
         }
 
         #loginForm input:focus {
@@ -121,7 +141,7 @@
         }
 
         #loginForm button {
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -136,13 +156,17 @@
             transform: translateY(-2px);
         }
 
+        #loginForm button:active {
+            transform: translateY(0);
+        }
+
         .info {
-            margin-top: 30px;
-            padding: 15px;
+            margin-top: 20px;
+            padding: 12px;
             background: #f3f4f6;
             border-radius: 12px;
             color: #6b7280;
-            font-size: 0.9em;
+            font-size: 0.85em;
             text-align: center;
         }
 
@@ -150,15 +174,20 @@
             color: #ef4444;
             margin-top: 10px;
             text-align: center;
+            font-size: 14px;
         }
 
+        /* Chat Header */
         .chat-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px 25px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
         .user-info {
@@ -169,12 +198,12 @@
 
         #currentUser {
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: clamp(1em, 4vw, 1.2em);
         }
 
         .status {
-            font-size: 0.75em;
-            padding: 4px 10px;
+            font-size: 0.7em;
+            padding: 3px 8px;
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
@@ -191,32 +220,49 @@
             background: #6b7280;
         }
 
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
         #logoutBtn, #downloadBtn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
-            margin-left: 10px;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
         #logoutBtn:hover, #downloadBtn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
         }
 
+        /* Chat Messages Area */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 25px;
+            padding: 15px;
             background: #f9fafb;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            min-height: 0;
         }
 
+        .welcome-message {
+            text-align: center;
+            color: #9ca3af;
+            padding: 40px 20px;
+            font-size: 1em;
+        }
+
+        /* Message Bubbles */
         .message {
             display: flex;
             flex-direction: column;
@@ -243,8 +289,8 @@
         }
 
         .message-bubble {
-            max-width: 70%;
-            padding: 12px 18px;
+            max-width: 80%;
+            padding: 10px 15px;
             border-radius: 20px;
             position: relative;
             word-wrap: break-word;
@@ -264,34 +310,39 @@
         }
 
         .message-sender {
-            font-size: 0.7em;
-            margin-bottom: 5px;
+            font-size: 0.65em;
+            margin-bottom: 4px;
             color: #6b7280;
             font-weight: 600;
+            margin-left: 5px;
         }
 
         .message-time {
-            font-size: 0.65em;
-            margin-top: 5px;
+            font-size: 0.6em;
+            margin-top: 4px;
             opacity: 0.7;
+            display: inline-block;
         }
 
+        /* Chat Input Area */
         .chat-input-area {
-            padding: 20px 25px;
+            padding: 12px 20px;
             background: white;
             border-top: 1px solid #f0f0f0;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
+            flex-shrink: 0;
         }
 
         #messageInput {
             flex: 1;
-            padding: 12px 18px;
+            padding: 10px 15px;
             border: 2px solid #e5e7eb;
             border-radius: 25px;
             font-size: 14px;
             background: #f9fafb;
+            -webkit-appearance: none;
         }
 
         #messageInput:focus {
@@ -301,7 +352,7 @@
         }
 
         #sendBtn {
-            padding: 12px 28px;
+            padding: 10px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -309,23 +360,32 @@
             cursor: pointer;
             font-weight: 600;
             transition: transform 0.2s;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
         #sendBtn:hover {
             transform: translateY(-2px);
         }
 
+        #sendBtn:active {
+            transform: translateY(0);
+        }
+
+        /* Typing Indicator */
         .typing-indicator {
             position: absolute;
-            bottom: 80px;
+            bottom: 70px;
             left: 20px;
             background: white;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             display: none;
             align-items: center;
             gap: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            font-size: 12px;
         }
 
         .typing-indicator.active {
@@ -338,8 +398,8 @@
         }
 
         .typing-dots span {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: #667eea;
             border-radius: 50%;
             animation: typingBounce 1.4s ease-in-out infinite;
@@ -354,51 +414,140 @@
             30% { transform: translateY(-8px); }
         }
 
-        .emoji-picker {
-            position: absolute;
-            bottom: 70px;
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
             right: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 10px;
-            display: none;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            z-index: 100;
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .emoji-picker.active {
-            display: grid;
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
-        .emoji {
-            cursor: pointer;
-            font-size: 1.5em;
-            padding: 5px;
-            transition: transform 0.2s;
+        /* Scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
         }
 
-        .emoji:hover {
-            transform: scale(1.2);
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
         }
 
-        #emojiBtn {
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 50%;
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
         }
 
+        /* Responsive Design - Mobile First */
         @media (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                height: 100vh;
+                height: 100dvh;
+            }
+            
             .container {
                 height: 100vh;
+                height: 100dvh;
+                max-width: 100%;
                 border-radius: 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
             }
+            
             .message-bubble {
                 max-width: 85%;
+                padding: 8px 12px;
+            }
+            
+            .login-card {
+                padding: 20px;
+            }
+            
+            .chat-header {
+                padding: 12px 15px;
+            }
+            
+            .chat-input-area {
+                padding: 10px 15px;
+            }
+            
+            #logoutBtn, #downloadBtn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .button-group {
+                gap: 5px;
+            }
+            
+            .typing-indicator {
+                bottom: 65px;
+                left: 10px;
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+            
+            .chat-messages {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-info {
+                font-size: 14px;
+            }
+            
+            #sendBtn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            #messageInput {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .message-bubble {
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .container {
+                position: relative;
+            }
+        }
+
+        /* Fix for iOS bottom bar */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .chat-input-area {
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+            }
+            
+            .chat-messages {
+                padding-bottom: env(safe-area-inset-bottom);
             }
         }
     </style>
@@ -433,8 +582,8 @@
                     <span id="currentUser"></span>
                     <span id="otherUserStatus" class="status offline">⚫ Offline</span>
                 </div>
-                <div>
-                    <button id="downloadBtn">💾 Save App</button>
+                <div class="button-group">
+                    <button id="downloadBtn">💾 Save</button>
                     <button id="logoutBtn">🚪 Logout</button>
                 </div>
             </div>
@@ -455,18 +604,13 @@
                     <span></span><span></span><span></span>
                 </div>
             </div>
-            <div class="emoji-picker" id="emojiPicker">
-                <div class="emoji">😊</div><div class="emoji">😂</div><div class="emoji">❤️</div>
-                <div class="emoji">😍</div><div class="emoji">👍</div><div class="emoji">🎉</div>
-                <div class="emoji">🔥</div><div class="emoji">💯</div><div class="emoji">🤣</div>
-                <div class="emoji">🥰</div><div class="emoji">😎</div><div class="emoji">🤔</div>
-            </div>
         </div>
     </div>
 
     <script>
         let ws = null, currentUser = null, typingTimeout = null;
         
+        // DOM Elements
         const loginScreen = document.getElementById('loginScreen');
         const chatScreen = document.getElementById('chatScreen');
         const loginForm = document.getElementById('loginForm');
@@ -478,8 +622,15 @@
         const currentUserSpan = document.getElementById('currentUser');
         const otherUserStatus = document.getElementById('otherUserStatus');
         const typingIndicator = document.getElementById('typingIndicator');
-        const emojiBtn = document.getElementById('emojiBtn');
-        const emojiPicker = document.getElementById('emojiPicker');
+
+        // Show notification function
+        function showTempNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification-toast';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
 
         // Download app feature
         if (downloadBtn) {
@@ -494,7 +645,7 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                alert('App saved! You can now use this HTML file offline (needs server running).');
+                showTempNotification('App saved successfully!');
             });
         }
 
@@ -502,6 +653,11 @@
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            
+            const submitBtn = loginForm.querySelector('button');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Logging in...';
+            submitBtn.disabled = true;
             
             try {
                 const response = await fetch('/login', {
@@ -518,9 +674,13 @@
                     connectWebSocket(username, password);
                 } else {
                     document.getElementById('loginError').textContent = 'Invalid credentials';
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 }
             } catch (error) {
                 document.getElementById('loginError').textContent = 'Connection error. Make sure server is running on port 5000';
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
             }
         });
 
@@ -540,7 +700,7 @@
             ws.onclose = () => {
                 if (currentUser) {
                     showLoginScreen();
-                    alert('Disconnected from server');
+                    showTempNotification('Disconnected from server');
                 }
             };
         }
@@ -549,15 +709,17 @@
             switch(data.type) {
                 case 'auth_success':
                     showChatScreen();
-                    if (data.messageHistory?.length) {
+                    if (data.messageHistory && data.messageHistory.length > 0) {
                         chatMessages.innerHTML = '';
                         data.messageHistory.forEach(msg => addMessageToChat(msg));
                     }
                     break;
+                    
                 case 'auth_fail':
                     alert('Authentication failed');
                     ws.close();
                     break;
+                    
                 case 'message':
                     addMessageToChat(data.data);
                     if (!document.hasFocus()) {
@@ -565,15 +727,29 @@
                         setTimeout(() => { document.title = '💫 Private Messenger'; }, 3000);
                     }
                     break;
+                    
                 case 'user_status':
                     updateOtherUserStatus(data.username, data.status);
                     break;
+                    
                 case 'typing':
                     if (data.isTyping) {
                         typingIndicator.classList.add('active');
-                        setTimeout(() => typingIndicator.classList.remove('active'), 2000);
+                        setTimeout(() => {
+                            typingIndicator.classList.remove('active');
+                        }, 2000);
                     }
                     break;
+            }
+        }
+
+        function updateOtherUserStatus(username, status) {
+            const statusText = status === 'online' ? '🟢 Online' : '⚫ Offline';
+            otherUserStatus.innerHTML = statusText;
+            otherUserStatus.className = `status ${status}`;
+            
+            if (status === 'online') {
+                showTempNotification(`${username} is now online!`);
             }
         }
 
@@ -604,11 +780,6 @@
             
             const welcomeMsg = chatMessages.querySelector('.welcome-message');
             if (welcomeMsg) welcomeMsg.remove();
-        }
-
-        function updateOtherUserStatus(username, status) {
-            otherUserStatus.innerHTML = status === 'online' ? '🟢 Online' : '⚫ Offline';
-            otherUserStatus.className = `status ${status}`;
         }
 
         function sendMessage() {
@@ -643,25 +814,11 @@
             if (ws) ws.close();
         }
 
+        // Event listeners
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         messageInput.addEventListener('input', sendTypingIndicator);
         logoutBtn.addEventListener('click', showLoginScreen);
-        
-        emojiBtn.addEventListener('click', () => emojiPicker.classList.toggle('active'));
-        document.querySelectorAll('.emoji').forEach(emoji => {
-            emoji.addEventListener('click', () => {
-                messageInput.value += emoji.textContent;
-                messageInput.focus();
-                emojiPicker.classList.remove('active');
-            });
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
-                emojiPicker.classList.remove('active');
-            }
-        });
     </script>
 </body>
 </html>
